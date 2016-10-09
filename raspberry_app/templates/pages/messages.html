@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block othersStylesheet %}
+
+
+
+{% endblock %}
+{% block pageTitle %}
+
+
+{% endblock pageTitle %}
+{% block content %}
+
+
+    <div class="widget blue">
+        <div class="widget-title">
+            <h4><i class="icon-bell"></i> Messages </h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+        </div>
+        <div class="widget-body">
+            <div class="slimScrollDiv">
+                <ul id="msgContainer" class="item-list scroller padding"
+                    style="overflow:auto;max-height: 380px;;width: auto; "
+                    data-always-visible="1">
+                    {% if messages|length != 0 %}
+                        {% for  m in messages %}
+                            <a href="{% url 'goToConversation' m.destinataire %}">
+                            <li id="li-{{ m.msg_id }}">
+                                {% if m.etat == 1 %}
+                                    <span class="label label-success"><i class="icon-check"></i></span>
+                                {% else %}
+                                    <span class="label label-warning"><i class="icon-ban-circle"></i></span>
+
+                                {% endif %}
+                                <span class="label label-info">+{{ m.destinataire }}</span>
+                                <span>{{ m.msg_body }}</span>
+                                <div class="pull-right">
+                                    <span class="small italic ">{{ m.date_envoie|date:"d-m-Y h:m:s" }}</span>
+
+                                </div>
+
+                            </li>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <li id="li-{{ m.msg_id }}">
+
+                            <span class="label label-warning"><i class="icon-ban-circle"></i></span>
+
+                            <span>Vous n'avez aucun message</span>
+                            <div class="pull-right">
+                                <span class="small italic "></span>
+
+                            </div>
+
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="space10"></div>
+            {% if messages|length > 0 %}
+                <a href="#" id="confirm" class="pull-right">Supprimer Tous Les Messages</a>
+            {% endif %}
+            <div class="clearfix no-top-space no-bottom-space"></div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block otherScript %}
+    <script>
+        $("#confirm").confirm({
+            text: "Voullez vous Supprimer Tous Les Messages?",
+            title: "Confirmation requise",
+            confirm: function (button) {
+                console.log('messages supprimer')
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'deleteAllMessages' %}",
+                    success: function (data) {
+                        if (data.status == 1) {
+
+                            $('#msgContainer').find('li').each(function () {
+                                var innerDivId = $(this).hide('slow', function () {
+                                    this.remove();
+                                });
+                            });
+                            $('#confirm').hide();
+                            $('#msgContainer').append("<span class='label label-warning'><i class=icon-ban-circle'></i></span>"
+
+                                    + "<span>Vous n avez aucun message</span>"
+                                    + "<div class='pull-right'>"
+                                    + "   <span class='small italic '></span>"
+
+                                    + " </div>")
+                        }
+                    },
+                });
+
+            },
+            cancel: function (button) {
+                // nothing to do
+            },
+            confirmButton: "Oui",
+            cancelButton: "Non,Annuler",
+            post: true,
+            confirmButtonClass: "btn-danger",
+            cancelButtonClass: "btn-default",
+            dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+        function getCookie(a) {
+            var b = null;
+            if (document.cookie && "" != document.cookie)for (var d = document.cookie.split(";"), c = 0; c < d.length; c++) {
+                var e = jQuery.trim(d[c]);
+                if (e.substring(0, a.length + 1) == a + "=") {
+                    b = decodeURIComponent(e.substring(a.length + 1));
+                    break
+                }
+            }
+            return b
+        }
+        var csrftoken = getCookie("csrftoken");
+        function csrfSafeMethod(a) {
+            return /^(GET|HEAD|OPTIONS|TRACE)$/.test(a)
+        }
+        $.ajaxSetup({
+            beforeSend: function (a, b) {
+                csrfSafeMethod(b.type) || this.crossDomain || a.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        });
+
+
+    </script>
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock footer %}

@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block othersStylesheet %}
+    {#    <link href="{% static 'keyboard/demo/demo.css' %}" rel="stylesheet">#}
+
+
+    <link href="{% static 'keyboard/css/keyboard.css' %}" rel="stylesheet">
+
+
+{% endblock %}
+{% block pageTitle %}
+
+    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+    <h3 class="page-title">
+        Accueil
+    </h3>
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Conversation</a>
+            <span class="divider">/</span>
+        </li>
+
+
+    </ul>
+    <!-- END PAGE TITLE & BREADCRUMB-->
+{% endblock pageTitle %}
+{% block content %}
+
+    <div class="container">
+        <div class="widget red">
+            <div class="widget-title">
+                <h4><i class="icon-comments-alt"></i> Conversation avec <strong>{{ contact.num_mobile }}</strong></h4>
+
+                    <span class="tools">
+
+                    </span>
+
+            </div>
+            <div class="widget-body" id="widget-body" style="overflow:auto;max-height: 270px;">
+
+                <div class="timeline-messages">
+                    <!-- Comment -->
+
+                    {% for m in messages %}
+                        <div class="msg-time-chat">
+                            <a class="message-img" href="#"></a>
+                            <div class="message-body msg-out">
+                                <span class="arrow"></span>
+                                <div class="text">
+                                    <p class="attribution"><a href="#"> {{ m.date_envoie|date:"d-m-Y h:m:s" }}</a></p>
+                                    <p>{{ m.msg_body|capfirst }}</p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                    <div class="msg-time-chat">
+                        <div id="fountainG" hidden="hidden">
+                            <div id="fountainG_1" class="fountainG"></div>
+                            <div id="fountainG_2" class="fountainG"></div>
+                            <div id="fountainG_3" class="fountainG"></div>
+                            <div id="fountainG_4" class="fountainG"></div>
+                            <div id="fountainG_5" class="fountainG"></div>
+                            <div id="fountainG_6" class="fountainG"></div>
+                            <div id="fountainG_7" class="fountainG"></div>
+                            <div id="fountainG_8" class="fountainG"></div>
+                        </div>
+                    </div>
+                    <!-- /comment -->
+                </div>
+
+            </div>
+            <div class="chat-form">
+                <form METHOD="POST" id="messageForm">{% csrf_token %}
+                    <div class="input-cont">
+                        <input name="message" id="message" type="text" placeholder="Tapez votre message ici...">
+                    </div>
+                    <div class="btn-cont">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block otherScript %}
+    <!-- jQuery & jQuery UI + theme (required) -->
+
+    <!-- keyboard extensions (optional) -->
+    <script src="{% static 'jquery-ui/jquery.cookie.js' %}"></script>
+    <!-- initialize keyboard (required) -->
+    <script type="text/javascript">
+        {#        $(function () {#}
+        {#            $('#message').keyboard();#}
+        {#        });#}
+    </script>
+
+
+    <script type="text/javascript">
+
+        function getCookie(a) {
+            var b = null;
+            if (document.cookie && "" != document.cookie)for (var d = document.cookie.split(";"), c = 0; c < d.length; c++) {
+                var e = jQuery.trim(d[c]);
+                if (e.substring(0, a.length + 1) == a + "=") {
+                    b = decodeURIComponent(e.substring(a.length + 1));
+                    break
+                }
+            }
+            return b
+        }
+        var csrftoken = getCookie("csrftoken");
+        function csrfSafeMethod(a) {
+            return /^(GET|HEAD|OPTIONS|TRACE)$/.test(a)
+        }
+        $.ajaxSetup({
+            beforeSend: function (a, b) {
+                csrfSafeMethod(b.type) || this.crossDomain || a.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        });
+
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#messageForm").submit(function (b) {
+
+                b.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'sendSMS' %}",
+                    data: {
+                        msg: $("#message").val(),
+
+                        contact: {{ contact.num_mobile }}
+                    },
+                    success: function (data) {
+                        $('#widget-body').append("<div class='msg-time-chat'>"
+                                + "<a class='message-img' href='#'></a>"
+                                + "<div class='message-body msg-out'>"
+                                + "  <span class='arrow'></span>"
+                                + "<div class='text'>"
+                                + "  <p class='attribution'><a href='#'>" + data.date_envoie + "</a></p>"
+                                + "  <p>" + data.message + "</p>"
+                                + "</div>"
+                                + "</div>"
+                                + "</div>");
+                        console.log(data.to);
+                        console.log(data.message);
+                    },
+                    error: function (data) {
+                        $('#widget-body').append("<div class='msg-time-chat'>"
+                                + "<a class='message-img' href='#'></a>"
+                                + "<div class='message-body msg-out'>"
+                                + "  <span class='arrow'></span>"
+                                + "<div class='text'>"
+                                + "  <p class='attribution'><a href='#'>" + data.date_envoie + "</a></p>"
+                                + "  <p>" + $("#message").val() + "</p>"
+                                + "  <span class='label label-important'>Votre message n'a pas été envoyé.erreur de serveur s'est produite</span>"
+                                + "</div>"
+                                + "</div>"
+                                + "</div>");
+                    }
+
+                });
+                return !1
+            })
+        });
+
+        $('#fountainG')
+                .hide()  // Hide it initially
+                .ajaxStart(function () {
+                    $(this).show();
+                    $("#widget-body").scrollBottom += 70;
+                })
+                .ajaxStop(function () {
+                    $(this).hide();
+                });
+    </script>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock footer %}

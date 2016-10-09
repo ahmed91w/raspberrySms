@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block othersStylesheet %}
+    <script src="{% static 'phoneDialPad/vendor/js/modernizr.min.js' %}"></script>
+
+    <link href="{% static 'phoneDialPad/vendor/css/normalize.css' %}" media="screen,projection" type="text/css"
+          rel="stylesheet"/>
+    <link href="{% static 'phoneDialPad/css/main.css' %}" media="screen,projection" type="text/css" rel="stylesheet"/>
+    <link href="{% static 'phoneDialPad/css/print.css' %}" media="print" type="text/css" rel="stylesheet"/>
+{% endblock othersStylesheet %}
+{% block pageTitle %}
+{% endblock %}
+{% block content %}
+
+    <div id="wrapper">
+        <div class="dialpad compact">
+            <form method="post" id="composeur">{% csrf_token %}
+                <div id="numerodiv" class="number"></div>
+                <div class="dials">
+                    <ol>
+                        <li class="digits"><p><strong>1</strong></p></li>
+                        <li class="digits"><p><strong>2</strong><sup>abc</sup></p></li>
+                        <li class="digits"><p><strong>3</strong><sup>def</sup></p></li>
+                        <li class="digits"><p><strong>4</strong><sup>ghi</sup></p></li>
+                        <li class="digits"><p><strong>5</strong><sup>jkl</sup></p></li>
+                        <li class="digits"><p><strong>6</strong><sup>mno</sup></p></li>
+                        <li class="digits"><p><strong>7</strong><sup>pqrs</sup></p></li>
+                        <li class="digits"><p><strong>8</strong><sup>tuv</sup></p></li>
+                        <li class="digits"><p><strong>9</strong><sup>wxyz</sup></p></li>
+                        <li class="digits"><p><strong>*</strong></p></li>
+                        <li class="digits"><p><strong>0</strong><sup>+</sup></p></li>
+                        <li class="digits"><p><strong>#</strong></p></li>
+                        <li class="digits"><p><strong><i class="fa fa-refresh"></i></strong><sup>Vider</sup></p></li>
+                        <li class="digits"><p><strong><i class="fa fa-times"></i></strong><sup>Supprimer</sup></p></li>
+                        <li class="digits pad-action"><a href="#myModal1" role="button" data-toggle="modal"><p>
+                            <strong><i class="fa fa-envelope"></i></strong> <sup>
+                            Message
+                        </sup></p></a></li>
+
+                    </ol>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="myModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+         aria-hidden="true">
+        <form id="composerForm" name="composerForm" method="POST" action="">{% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel1">Confirmation</h3>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" value="" name="numero" id="formNumerohidden">
+
+                <p id="NumHolder"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Fermer</button>
+                <button type="submit" id="composeurSumbit" class="btn btn-primary">Envoyer</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}
+
+
+{% block otherScript %}
+    <script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
+
+    <script src="{% static 'phoneDialPad/js/main.js' %}"></script>
+{% endblock %}

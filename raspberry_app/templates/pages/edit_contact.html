@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% block pageTitle %}{% endblock %}
+    <div class="span10">
+        <!-- BEGIN SAMPLE FORMPORTLET-->
+        <div class="widget green">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i> Edition du Contact </h4>
+                            <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+
+                            </span>
+            </div>
+            <div class="widget-body">
+                <!-- BEGIN FORM-->
+                <form id="editContact" action="{% url 'updateContact' %}" method="POST"
+                      class="form-horizontal">{% csrf_token %}
+
+                    <input type="hidden" name="id" value="{{ id }}">
+                    <div class="control-group">
+                        <label class="control-label">Nom</label>
+                        <div class="controls">
+                            <input type="text" name="nom" id="nom" value="{{ contact.nom }}" class="span6 " required>
+
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Prenom</label>
+                        <div class="controls">
+                            <input class="span6 " name="prenom" id="prenom" value="{{ contact.prenom }}" type="text"
+                                   placeholder="" required>
+
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Mobile</label>
+                        <div class="controls">
+                            <input class="span6 " name="mobile" id="mobile" value="{{ contact.num_mobile }}" type="text"
+                                   placeholder="" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Email</label>
+                        <div class="controls">
+                            <input type="email" class="span6 " name="email" value="{{ contact.email }}" id="email"
+                                   style="margin: 0 auto;" >
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success">Valider</button>
+                        <a href="{% url 'contacts' %}" type="button" class="btn">Retour</a>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+{% endblock %}
+
+{% block otherScript %}
+
+
+
+    <script type="text/javascript">
+
+        $("#editContact").validate({
+            rules: {
+                nom: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 10,
+
+                },
+
+                prenom: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 10
+                },
+
+                email: {
+                    required: true,
+                    email: true,
+
+                },
+                mobile: {
+                    required: true,
+                }
+
+
+            },
+            messages: {
+                password: {
+                    required: "ce champs est nécessaire"
+
+                }
+            }
+
+        });
+
+
+    </script>
+{% endblock %}

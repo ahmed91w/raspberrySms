@@ -1,0 +1,165 @@
+<html lang="en" style="display: block; background: rgb(231, 235, 240);">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>{% block titile %}RapsberryApp{% endblock titile %}</title>
+    {% load static %}
+
+    {% block styleSheet %}
+        <link rel="stylesheet" href="{% static 'telegram/css/app.css' %}">
+
+        <link rel="stylesheet" href="{% static 'telegram/css/desktop.css' %}">
+
+        <link href="{% static 'keyboard/demo/demo.css' %}" rel="stylesheet">
+
+
+        <link href="{% static 'keyboard/css/keyboard.css' %}" rel="stylesheet">
+
+    {% endblock styleSheet %}
+</head>
+<body class="non_osx non_msie is_1x">
+<!-- ngView:  -->
+<div class="page_wrap" ng-view="">
+    <div class="login_page_wrap" my-custom-background="#e7ebf0">
+        <div class="login_head_bg"></div>
+        <div class="login_page">
+            <div class="login_head_wrap clearfix">
+                <!-- ngSwitchWhen: true -->
+                <!-- ngSwitchDefault:  -->
+                <div class="login_head_submit_wrap">
+
+                    <img style="margin-right: 81px;" src="{% static 'img/raspAppLogo.png' %}" alt="Raspberry App"/>
+
+                </div>
+
+            </div>
+
+            <div class="login_form_wrap">
+                <!-- ngIf: error.message -->
+
+                <!-- ngIf: !credentials.phone_code_hash -->
+                <form name="myLoginForm" id="myLoginForm" method="post"
+
+                      class="ng-pristine ng-invalid ng-invalid-required">{% csrf_token %}
+                    {{ csrf_input }}
+
+                    <p class="login_form_lead" id="message" style="color: #D55E5C;font-size: 10px;"></p>
+
+                    <div class="md-input-group md-input-has-value login_phone_country_input_group"
+                    >
+                        <label class="md-input-label">Nom d'utilisateur</label>
+                        <input autocomplete="off" required="required" class="md-input" value="" name="u_username"
+                               id="u_username"
+                               type="text"/>
+                        <label for="u_username" id="u_username_error" style="color: #D55E5C" class="label"></label>
+                    </div>
+
+                    <div class="login_phone_groups_wrap clearfix">
+
+                        <div class="md-input-group md-input-has-value login_phone_country_input_group">
+                            <label class="md-input-label">Mot de passe</label>
+                            <input autocomplete="off" required="required" class="md-input" name="u_password"
+                                   id="u_password"
+                                   type="password">
+                            <label for="u_password" id="u_password_error" style="color: #D55E5C" class="label"></label>
+                        </div>
+
+                        <input type="submit" class="btn-primary" value="Connexion">
+                    </div>
+                    <div class="login_form_messaging ng-hide">
+
+                    </div>
+                </form>
+
+            </div>
+
+            <div ng-switch="about.shown">
+                <!-- ngSwitchWhen: true -->
+                <!-- ngSwitchDefault:  -->
+                <div ng-switch-default="" class="login_footer_wrap">
+                    <p my-i18n="login_about_intro"></p>
+                    <a class="logo_footer_learn_more_link" href="" ng-click="about.shown = true"
+                       my-i18n="login_about_learn"></a>
+                </div><!-- end ngSwitchWhen: -->
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div id="notify_sound">
+</div>
+{% block javascript %}
+
+    <!-- jQuery & jQuery UI + theme (required) -->
+
+    <script src="{% static 'jquery/jquery.js' %}"></script>
+    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'keyboard/js/jquery.keyboard.js' %}"></script>
+            <link href="{% static 'jquery/jquery-ui.css' %}" rel="stylesheet">
+    <!-- keyboard extensions (optional) -->
+    <script src="{% static 'keyboard/js/jquery.mousewheel.js' %}"></script>
+    <script src="{% static 'jquery-ui/jquery.cookie.js' %}"></script>
+    <!-- initialize keyboard (required) -->
+    <script>
+        $(function () {
+            $('#u_username').keyboard();
+            $('#u_password').keyboard();
+        });
+    </script>
+{% endblock javascript %}
+<script type="text/javascript">
+
+    function getCookie(a) {
+        var b = null;
+        if (document.cookie && "" != document.cookie)for (var d = document.cookie.split(";"), c = 0; c < d.length; c++) {
+            var e = jQuery.trim(d[c]);
+            if (e.substring(0, a.length + 1) == a + "=") {
+                b = decodeURIComponent(e.substring(a.length + 1));
+                break
+            }
+        }
+        return b
+    }
+    var csrftoken = getCookie("csrftoken");
+    function csrfSafeMethod(a) {
+        return /^(GET|HEAD|OPTIONS|TRACE)$/.test(a)
+    }
+    $.ajaxSetup({
+        beforeSend: function (a, b) {
+            csrfSafeMethod(b.type) || this.crossDomain || a.setRequestHeader("X-CSRFToken", csrftoken)
+        }
+    });
+
+
+    function shakeForm() {
+        for (var a = 20, b = 0; 10 > b; b++)$("form").animate({
+            "margin-left": "+=" + (a = -a) + "px",
+            "margin-right": "-=" + a + "px"
+        }, 50)
+    }
+    ;
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#myLoginForm").submit(function (b) {
+            b.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'authentication' %}",
+                data: {username: $("#u_username").val(), password: $("#u_password").val()},
+                success: function (a) {
+                    1 == a.status ? window.location = "{% url 'index' %}" : -1 == a.status ? (shakeForm(), $("#message").html(a.message)) : -2 == a.status && ($("#message").html(a.message), shakeForm())
+                }
+            });
+            return !1
+        })
+    });
+</script>
+<div id="nacl_listener">
+</div>
+</body>
+</html>

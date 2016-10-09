@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <div class="row-fluid">
+        <!--BEGIN METRO STATES-->
+        <div class="metro-nav">
+            <div class="metro-nav-block nav-block-orange">
+                <a href="{% url "contacts" %} " data-original-title="" href="#">
+                    <i class="icon-user"></i>
+                    <div class="info">{{ contacts }}</div>
+                    <div class="status">Contacts</div>
+                </a>
+            </div>
+            <div class="metro-nav-block nav-block-yellow" style="margin-right: 13.250px">
+                <a data-original-title="" href="{% url 'messages' %}">
+                    <i class="icon-envelope"></i>
+                    <div class="info">{{ messages }}</div>
+                    <div class="status">Messages</div>
+                </a>
+            </div>
+            {#            <div class="metro-nav-block nav-block-purple" style="margin-right: 13.250px">#}
+            {#                <a data-original-title="" href="#">#}
+            {#                    <i class="icon-comments-alt"></i>#}
+            {#                    <div class="info">0</div>#}
+            {#                    <div class="status">Chat</div>#}
+            {#                </a>#}
+            {#            </div>#}
+
+        </div>
+        <div class="metro-nav">
+
+
+            <div class="metro-nav-block nav-block-blue">
+                <a data-original-title="" href="{% url 'composeur' %}">
+                    <i class=" icon-th"></i>
+                    <div class="info"></div>
+                    <div class="status">Composeur</div>
+                </a>
+            </div>
+
+            <div class="metro-nav-block nav-block-grey ">
+                <a data-original-title="" href="#">
+                    <i class="icon-off"></i>
+                    <div class="info"></div>
+                    <div class="status">Power OFF</div>
+                </a>
+            </div>
+        </div>
+        <div class="space10"></div>
+        <!--END METRO STATES-->
+    </div>
+    {% block footer %}
+    {% endblock %}
+{% endblock content %}

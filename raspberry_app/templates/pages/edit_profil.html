@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% block header %}
+    {% endblock %}
+
+
+    <div class="span12">
+        <!-- BEGIN TAB PORTLET-->
+        <div class="widget widget-tabs purple">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>Edition du Profil</h4>
+            </div>
+            <div class="widget-body">
+                <div class="tabbable ">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#widget_tab1 " data-toggle="tab">Nom Prenom & Email</a></li>
+                        <li class=""><a href="#widget_tab2" data-toggle="tab">Mot de passe</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="widget_tab1">
+                            <form id="editProfilFormCheck" action="{% url 'profil_update' %}" method="post" class="form-horizontal">
+                                {% csrf_token %}
+
+                                <div class="control-group">
+                                    <label class="control-label">Nom</label>
+                                    <div class="controls">
+                                        <input id="u_fname" name="fname" type="text"
+                                               value="{{ request.user.first_name }}"
+                                               class="span6  popovers">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Prenom</label>
+                                    <div class="controls">
+                                        <input id="u_lname" name="lname" type="text" class="span6  popovers"
+                                               value="{{ request.user.last_name }}">
+
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Email </label>
+                                    <div class="controls">
+                                        <div class="input-icon left">
+                                            <i class="icon-envelope"></i>
+                                            <input id="u_email" name="email" class="span6  popovers " type="text"
+                                                   value="{{ request.user.email }}"
+                                                   placeholder="Email Address">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-success">Valider</button>
+                                    <a href="{% url 'profile' %}" class="btn btn-default">Retour</a>
+
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="widget_tab2">
+                            <form action="{% url 'edit_password' %}" method="POST" id="formCheckPassword" name="formCheckPassword"
+                                  class="form-horizontal">
+                                {% csrf_token %}
+                                <div class="control-group">
+                                    <label class="control-label">Mot de passe</label>
+                                    <div class="controls">
+
+                                        <input class=" span6  popovers" id="password" name="password"
+                                               type="password" required>
+
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Verification du mot de passe</label>
+                                    <div class="controls">
+
+                                        <input class=" span6  popovers" type="password" id="password_confirm"
+                                               name="password_confirm"
+                                               required>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-success">Valider</button>
+                                    <a href="{% url 'profile' %}" class="btn btn-default">Retour</a>
+
+
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END TAB PORTLET-->
+    </div>
+
+{% endblock %}
+
+
+{% block otherScript %}
+
+    {% load static %}
+
+    <script type="text/javascript">
+
+        $("#formCheckPassword").validate({
+            rules: {
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 10,
+
+                },
+
+                password_confirm: {
+                    equalTo: "#password",
+                    minlength: 6,
+                    maxlength: 10
+                }
+
+
+            },
+            messages: {
+                password: {
+                    required: "le mot de passe est nécessaire"
+
+                }
+            }
+
+        });
+
+        $("#editProfilFormCheck").validate({
+            rules: {
+                u_email: {
+                    required: true,
+                    email: true,
+
+                },
+            },
+            messages: {
+                password: {
+                    required: "le mot de passe est nécessaire"
+
+                }
+            }
+
+        });
+    </script>
+{% endblock %}

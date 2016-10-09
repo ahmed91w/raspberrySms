@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block othersStylesheet %}
+
+{% endblock othersStylesheet %}
+{% block pageTitle %}
+{% endblock %}
+{% block content %}
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN EXAMPLE TABLE widget-->
+            <div class="widget red">
+                <div class="widget-title">
+                    <h4><i class="icon-reorder"></i>Liste des contacts</h4>
+
+
+
+                            <span class="tools">
+                                <a href="javascript:;" class="icon-chevron-down"></a>
+
+                            </span>
+                </div>
+                <div class="widget-body">
+                    <a href="{% url 'addContact' %}" class="btn btn-danger">Nouveau Contact</a>
+                    <br>
+                    <div id="sample_1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+
+                        <table class="table table-striped table-bordered dataTable" id="sample_1"
+                               aria-describedby="sample_1_info">
+                            <thead>
+                            <tr role="row">
+
+                                <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_1"
+                                    rowspan="1" colspan="1" aria-label="Username: activate to sort column ascending"
+                                    style="">Nom et Prenom
+                                </th>
+                                <th class="hidden-phone sorting" role="columnheader" tabindex="0"
+                                    aria-controls="sample_1" rowspan="1" colspan="1"
+                                    aria-label="Email: activate to sort column ascending"
+                                    style="">Mobile
+                                </th>
+                                <th style="" class="sorting_disabled" role="columnheader" rowspan="1"
+                                    colspan="1" aria-label="">
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                            {% for c in contacts %}
+                                <tr class="gradeX odd">
+
+                                    <td class=" ">{{ c.nomPrenom }}</td>
+                                    <td class="hidden-phone ">
+                                        <a>{{ c.num_mobile }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+
+                                            <a href="{% url 'addMsg' c.contact_id %}" class="btn btn-small btn-warning"><i
+                                                    class="icon-envelope"></i>Message</a>
+                                            <a href=" {% url 'editContact' c.contact_id %}"
+                                               class="btn btn-small btn-success"><i class="icon-edit"></i>Editer</a>
+                                            <a href=" {% url 'removeContact' c.contact_id %}"
+                                               class="btn btn-small btn-danger"><i class="icon-trash"></i>Suprimer</a>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <!-- END EXAMPLE TABLE widget-->
+        </div>
+    </div>
+{% endblock content %}
+
+
+
+{% block otherScript %}
+    <script src="{% static 'js/jquery.blockui.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'uniform/jquery.uniform.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'data-tables/jquery.dataTables.js' %}"></script>
+    <script type="text/javascript" src="{% static 'data-tables/DT_bootstrap.js' %}"></script>
+    <script src="{% static 'js/dynamic-table.js' %}"></script>
+{% endblock %}
