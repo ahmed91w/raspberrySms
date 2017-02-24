@@ -36,8 +36,8 @@ def sendSMS(request):
         bodymsg = request.POST.get('msg')
         to_number = request.POST.get('contact')
         # to_number = "+212600100367"
-        account_sid = "AC384fe929fd697c880c130dc417c4624a"
-        auth_token = "2d3a53aeb30b325e9793b4a3b604d8f1"
+        account_sid = "account_sid"
+        auth_token = "auth_token"
         client = TwilioRestClient(account_sid, auth_token)
         message = client.messages.create(
             body=bodymsg,
