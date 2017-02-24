@@ -14,8 +14,6 @@ from raspberry_app.models import *
 from django.shortcuts import get_object_or_404
 
 
-# Create your views here.
-
 
 def composeur(request):
     return render(request, 'pages/composeur.html')
@@ -61,10 +59,6 @@ def loginView(request):
 
 
 def login_check(request):
-    """check login
-        :parameter request
-
-    """
     if request.method == 'POST':
         u_username = request.POST.get('username')
         u_password = request.POST.get('password')
@@ -75,13 +69,13 @@ def login_check(request):
                 response = {'status': 1, 'message': 'Ok'}
                 return JsonResponse(response)
             else:
-                response = {'status': -1, 'message': 'Le mot de passe est valide, mais le compte a été désactivé!'}
+                response = {'status': -1, 'message': 'Le mot de passe est valide, mais le compte a ete desactive'}
                 return JsonResponse(response)
         else:
             response = {'status': -2, 'message': 'Le nom d\'utilisateur ou mot de passe sont incorrects.'}
             return JsonResponse(response)
     else:
-        response = {'status': -3, 'message': 'N\'est pas une requête POST.'}
+        response = {'status': -3, 'message': 'est pas une requete POST.'}
         return JsonResponse(response)
 
 
@@ -240,5 +234,5 @@ def deleteAllMessages(request):
     for m in messages:
         m.delete()
         print(m.msg_id)
-    response = {'status': 1, 'message': 'Messages Supprimés avec succes.'}
+    response = {'status': 1, 'message': 'Messages Supprimes avec succes.'}
     return JsonResponse(response)

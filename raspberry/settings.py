@@ -121,9 +121,8 @@ USE_TZ = True
 
 STATIC_URL = '/assets/'
 STATICFILES_DIRS = (
-    'C:\\Users\\Ahmed\\PycharmProjects\\raspberry\\raspberry_app\\assets\\',
+    BASE_DIR+'\\raspberry_app\\assets\\',
 )
-
 CRONJOBS = [
     ('*/5 * * * *', 'raspberry_app.cron.my_scheduled_job')
 ]

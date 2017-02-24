@@ -18,9 +18,7 @@ from django.contrib import admin
 from raspberry_app.views import *
 from  django.conf.urls import include
 
-# ^ indique le début de la chaîne (autrement dit, il ne peut rien y avoir avant /accueil) ;
-# ? indique que le caractère précédent peut être absent ;
-# $ est le contraire de ^, il indique la fin de la chaîne.
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^show/(?P<id>[-\w]+)$', showUser),
